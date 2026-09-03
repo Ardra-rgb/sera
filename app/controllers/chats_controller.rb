@@ -9,6 +9,7 @@ class ChatsController < ApplicationController
     @chat = Chat.new
     @selected_model = params[:model]
     @chat_models = available_chat_models
+    @chats = Chat.order(created_at: :desc)
   end
 
   def create
@@ -33,6 +34,7 @@ class ChatsController < ApplicationController
 
   def show
     @message = @chat.messages.build
+    @chats = Chat.order(created_at: :desc)
   end
 
   def destroy

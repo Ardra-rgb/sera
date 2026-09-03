@@ -24,6 +24,47 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div class="sera-layout">
+      <aside class="sera-sidebar">
+        <div class="sera-brand">
+          <span class="sera-brand-mark">S</span>
+          <span>SERA</span>
+        </div>
+
+        <%= link_to new_chat_path, class: "new-chat-button" do %>
+          <span>＋</span>
+          <span>New chat</span>
+        <% end %>
+
+        <div class="chat-history">
+          <% if defined?(@chats) && @chats.present? %>
+            <div class="history-heading">Chats</div>
+
+            <% @chats.each do |chat| %>
+              <%= link_to chat_path(chat),
+                          class: "chat-history-item #{'active' if defined?(@chat) && @chat&.id == chat.id}" do %>
+                <span class="chat-history-icon">◦</span>
+                <span class="chat-history-title">
+                  <%= truncate(
+                        chat.messages.where(role: "user").first&.content.presence || "New chat",
+                        length: 32
+                      ) %>
+                </span>
+              <% end %>
+            <% end %>
+          <% else %>
+            <div class="empty-history">No previous chats</div>
+          <% end %>
+        </div>
+
+        <div class="sidebar-bottom">
+          <%= link_to "Models", models_path, class: "sidebar-link" %>
+        </div>
+      </aside>
+
+      <main class="sera-main">
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>

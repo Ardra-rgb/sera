@@ -1,25 +1,35 @@
-<% if notice.present? %>
-  <p style="color: green"><%= notice %></p>
-<% end %>
+<% content_for :title, "Chat #{@chat.id}" %>
 
 <%= turbo_stream_from "chat_#{@chat.id}" %>
 
-<% content_for :title, "Chat" %>
+<div class="chat-page">
+  <header class="chat-header">
+    <div>
+      <h1>Chat <%= @chat.id %></h1>
+      <p>
+        Using
+        <strong><%= @chat.model&.label || default_model_display_name %></strong>
+      </p>
+    </div>
+  </header>
 
-<h1>Chat <%= @chat.id %></h1>
-
-<p>Using <strong><%= @chat.model&.label || default_model_display_name %></strong></p>
-<%= render "application_status" %>
-<div id="messages">
-  <% @chat.messages.where.not(id: nil).each do |message| %>
-    <%= render message %>
+  <% if notice.present? %>
+    <div class="chat-notice">
+      <%= notice %>
+    </div>
   <% end %>
-</div>
 
-<div style="margin-top: 30px;">
-  <%= render "messages/form", chat: @chat, message: @message %>
-</div>
+  <section class="chat-content">
+    <%= render "application_status" %>
 
-<div style="margin-top: 20px;">
-  <%= link_to "Back to chats", chats_path %>
+    <div id="messages" class="messages-container">
+      <% @chat.messages.where.not(id: nil).each do |message| %>
+        <%= render message %>
+      <% end %>
+    </div>
+  </section>
+
+  <div class="chat-composer">
+    <%= render "messages/form", chat: @chat, message: @message %>
+  </div>
 </div>
