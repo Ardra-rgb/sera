@@ -1,0 +1,60 @@
+<div id="application-status"
+     style="margin: 20px 0; padding: 16px; border: 1px solid #ccc; border-radius: 8px;">
+
+  <% task = ApplicationTask.where(application_name: "NIMCET").last %>
+
+  <% if task.present? %>
+    <h2 style="margin-top: 0;">Application Status</h2>
+
+    <p>
+      <strong><%= task.application_name %></strong>
+    </p>
+
+    <p>
+      Status:
+      <strong><%= task.status.humanize %></strong>
+    </p>
+
+    <p>
+      <%= task.details %>
+    </p>
+
+    <% if task.status == "waiting_for_user" %>
+
+      <%= button_to "Done - Continue",
+          continue_application_path(task),
+          method: :post,
+          style: "padding: 10px 16px; cursor: pointer;" %>
+
+    <% elsif task.status == "ready_for_review" %>
+      <p>
+        <strong>Please review the application before submission.</strong>
+      </p>
+
+      <%= button_to "Approve for Submission",
+          approve_application_path(task),
+          method: :post,
+          style: "padding: 10px 16px; cursor: pointer;" %>
+
+    <% elsif task.status == "approved" %>
+
+      <p>
+        <strong>Approved for submission.</strong>
+      </p>
+
+    <% elsif task.status == "submitted" %>
+
+      <p>
+        <strong>Application submitted successfully.</strong>
+      </p>
+
+    <% end %>
+
+  <% else %>
+
+    <h2 style="margin-top: 0;">Application Status</h2>
+    <p>No active application task.</p>
+
+  <% end %>
+
+</div>

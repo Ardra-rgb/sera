@@ -1,0 +1,8 @@
+<h1>SERA</h1>
+
+<p><%= @message %></p>
+
+<%= form_with url: "/agent/chat", method: :post, data: { turbo: false } do |form| %>
+  <%= form.text_field :message, placeholder: "What would you like me to do?" %>
+  <%= form.submit "Send" %>
+<% end %>
