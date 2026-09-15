@@ -14,16 +14,20 @@ class ChatsController < ApplicationController
 
   def create
     prompt = params.dig(:chat, :prompt)
+    attachments = params.dig(:chat, :attachments)
 
-    if prompt.present?
+    if prompt.present? || attachments.present?
       @chat = Chat.create!(
         model: params.dig(:chat, :model).presence
       )
 
       message = @chat.messages.create!(
         role: :user,
-        content: prompt
+        content: prompt.to_s
       )
+      if attachments.present?
+        message.attachments.attach(attachments)
+      end
 
       ChatResponseJob.perform_later(@chat.id, message.id)
 

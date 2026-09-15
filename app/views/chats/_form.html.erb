@@ -18,11 +18,12 @@
         {},
         style: "width: 100%; max-width: 600px; padding: 5px;" %>
   </div>
-
   <div style="margin-top: 15px;">
     <%= form.text_field :prompt, style: "width: 100%; max-width: 600px;", placeholder: "What would you like to discuss?", autofocus: true %>
   </div>
-
+  <div style="margin-top: 15px;">
+    <%= form.file_field :attachments, multiple: true %>
+  </div>
   <div>
     <%= form.submit "Start new chat" %>
   </div>
