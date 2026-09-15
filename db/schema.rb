@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_30_051547) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_15_085006) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -50,6 +50,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_30_051547) do
   create_table "chats", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "model_id"
+    t.string "provider"
     t.datetime "updated_at", null: false
     t.index ["model_id"], name: "index_chats_on_model_id"
   end

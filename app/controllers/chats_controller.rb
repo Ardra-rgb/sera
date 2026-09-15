@@ -1,15 +1,15 @@
 class ChatsController < ApplicationController
-  before_action :set_chat, only: [ :show, :destroy ]
+  before_action :set_chat, only: [:show, :destroy]
 
   def index
-    @chats = Chat.order(created_at: :desc)
+    @chats = filtered_chats
   end
 
   def new
     @chat = Chat.new
     @selected_model = params[:model]
     @chat_models = available_chat_models
-    @chats = Chat.order(created_at: :desc)
+    @chats = filtered_chats
   end
 
   def create
@@ -17,14 +17,25 @@ class ChatsController < ApplicationController
     attachments = params.dig(:chat, :attachments)
 
     if prompt.present? || attachments.present?
-      @chat = Chat.create!(
-        model: params.dig(:chat, :model).presence
+      model = params.dig(:chat, :model).presence
+      provider = params.dig(:chat, :provider).presence
+
+      ruby_llm_provider =
+        provider == "groq" ? :openai : :gemini
+
+      @chat = Chat.new
+
+      @chat.with_model(
+        model,
+        provider: ruby_llm_provider,
+        assume_exists: provider == "groq"
       )
 
       message = @chat.messages.create!(
         role: :user,
         content: prompt.to_s
       )
+
       if attachments.present?
         message.attachments.attach(attachments)
       end
@@ -34,11 +45,9 @@ class ChatsController < ApplicationController
       redirect_to @chat, notice: "Chat was successfully created."
     end
   end
-  
-
   def show
     @message = @chat.messages.build
-    @chats = Chat.order(created_at: :desc)
+    @chats = filtered_chats
   end
 
   def destroy
@@ -47,6 +56,17 @@ class ChatsController < ApplicationController
   end
 
   private
+
+  def filtered_chats
+    if params[:q].present?
+      Chat.joins(:messages)
+          .where("messages.content LIKE ?", "%#{params[:q]}%")
+          .distinct
+          .order(created_at: :desc)
+    else
+      Chat.order(created_at: :desc)
+    end
+  end
 
   def set_chat
     @chat = Chat.find(params[:id])

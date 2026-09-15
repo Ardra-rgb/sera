@@ -9,6 +9,18 @@
   <%= link_to "Models", models_path %>
 </p>
 
+
+
+<%= form_with url: chats_path, method: :get, local: true do |form| %>
+  <%= form.text_field :q,
+      value: params[:q],
+      placeholder: "Search previous messages..." %>
+
+  <%= form.submit "Search" %>
+<% end %>
+
+
+
 <div id="chats">
   <% if @chats.any? %>
     <% @chats.each do |chat| %>

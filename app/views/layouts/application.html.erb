@@ -36,6 +36,13 @@
           <span>New chat</span>
         <% end %>
 
+        <%= form_with url: request.path, method: :get, local: true do |form| %>
+          <%= form.text_field :q,
+            value: params[:q],
+            placeholder: "Search chats...",
+            style: "width: 100%; box-sizing: border-box; margin-top: 10px; padding: 10px;" %>
+        <% end %>
+
         <div class="chat-history">
           <% if defined?(@chats) && @chats.present? %>
             <div class="history-heading">Chats</div>

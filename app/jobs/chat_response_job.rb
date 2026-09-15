@@ -77,7 +77,11 @@ class ChatResponseJob < ApplicationJob
           completed a human verification step, use BrowserApplicationTool
           with the continue action to inspect the current visible browser
           page and resume the task.
-    PROMPT
+
+      13. Write responses in clean, natural plain text. Do not use Markdown
+          formatting such as **bold**, *italics*, # headings, or backticks.
+          Use normal sentences and simple line breaks instead.
+          PROMPT
 
     response = llm_chat.ask(user_message.content.to_s)
 

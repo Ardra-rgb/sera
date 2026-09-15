@@ -12,19 +12,76 @@
   <% end %>
 
   <div>
-    <%= form.label :model, "Select AI model:", style: "display: block" %>
-    <%= form.select :model,
-        options_for_select(@chat_models.map { |model| [model.label, model.id] }, (@selected_model.presence || "gemini-3.6-flash")),
+    <%= form.label :provider, "AI Provider:", style: "display: block" %>
+    <%= form.select :provider,
+        [["Gemini", "gemini"], ["Groq", "groq"]],
         {},
         style: "width: 100%; max-width: 600px; padding: 5px;" %>
   </div>
+
   <div style="margin-top: 15px;">
-    <%= form.text_field :prompt, style: "width: 100%; max-width: 600px;", placeholder: "What would you like to discuss?", autofocus: true %>
+    <%= form.label :model, "Select AI model:", style: "display: block" %>
+
+    <%= form.select :model,
+        options_for_select(
+          @chat_models.map { |model| [model.label, model.id] },
+          (@selected_model.presence || "gemini-3.6-flash")
+        ),
+        {},
+        id: "model-select",
+        style: "width: 100%; max-width: 600px; padding: 5px;" %>
   </div>
+
+  <div style="margin-top: 15px;">
+    <%= form.text_field :prompt,
+        style: "width: 100%; max-width: 600px;",
+        placeholder: "What would you like to discuss?",
+        autofocus: true %>
+  </div>
+
   <div style="margin-top: 15px;">
     <%= form.file_field :attachments, multiple: true %>
   </div>
+
   <div>
     <%= form.submit "Start new chat" %>
   </div>
 <% end %>
+
+<script>
+  const providerSelect = document.getElementById("chat_provider");
+  const modelSelect = document.getElementById("model-select");
+
+  const geminiModels = [
+    <% @chat_models.each do |model| %>
+      {
+        label: "<%= j model.label %>",
+        id: "<%= j model.id %>"
+      },
+    <% end %>
+  ];
+
+  const groqModels = [
+    {
+      label: "GPT-OSS 120B",
+      id: "openai/gpt-oss-120b"
+    }
+  ];
+
+  function updateModels() {
+    const models = providerSelect.value === "groq"
+      ? groqModels
+      : geminiModels;
+
+    modelSelect.innerHTML = "";
+
+    models.forEach(model => {
+      const option = document.createElement("option");
+      option.textContent = model.label;
+      option.value = model.id;
+      modelSelect.appendChild(option);
+    });
+  }
+
+  providerSelect.addEventListener("change", updateModels);
+</script>
