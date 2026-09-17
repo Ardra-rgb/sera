@@ -75,4 +75,4 @@ gem "ruby_llm", "~> 1.16"
 
 gem "pdf-reader", "~> 2.16"
 
-gem "playwright-ruby-client", "~> 1.62"
+gem "playwright-ruby-client", "~> 1.63"
