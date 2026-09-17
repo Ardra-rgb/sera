@@ -224,7 +224,7 @@ GEM
       afm (>= 0.2.1, < 2)
       hashery (~> 2.0)
       ttfunk
-    playwright-ruby-client (1.62.0)
+    playwright-ruby-client (1.63.0)
       base64
       concurrent-ruby (>= 1.1.6)
       mime-types (>= 3.0)
@@ -424,7 +424,7 @@ DEPENDENCIES
   jbuilder
   kamal
   pdf-reader (~> 2.16)
-  playwright-ruby-client (~> 1.62)
+  playwright-ruby-client (~> 1.63)
   propshaft
   puma (>= 5.0)
   rails (~> 8.1.3)
