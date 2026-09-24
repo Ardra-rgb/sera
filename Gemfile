@@ -71,7 +71,7 @@ gem "dotenv-rails", "~> 3.2"
 
 gem "faraday", "~> 2.14"
 
-gem "ruby_llm", "~> 1.16"
+gem "ruby_llm", "~> 2.0"
 
 gem "pdf-reader", "~> 2.16"
 
